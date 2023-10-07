@@ -267,7 +267,7 @@ void updateParticle(const ParticleCursor& cursor,
  *                             offset,
  *                             filter,
  *                             event.isBackground(),
- *			       preselect);
+ *                             preselect);
  * @endcode
  *
  * Here @a preselect must be a map from track number to a positive
