@@ -801,7 +801,7 @@ void AODProducerWorkflowDPL::updateMCHeader(MCCollisionCursor& collisionCursor,
                        : HepMCUpdate::never);
 }
 
-void dimensionMCKeepStore(std::vector<std::vector<std::unordered_map<int, int>*>>& store, int Nsources, int NEvents)
+void dimensionMCKeepStore(std::vector<std::vector<std::unordered_map<int, int>>>& store, int Nsources, int NEvents)
 {
   store.resize(Nsources);
   for (int s = 0; s < Nsources; ++s) {
@@ -919,7 +919,7 @@ void AODProducerWorkflowDPL::fillMCParticlesTable(o2::steer::MCKinematicsReader&
     int mcColId = colInfo[0];
     std::vector<MCTrack> const& mcParticles = mcReader.getTracks(source, event);
 
-    auto& preselect = *mToStore[source][event];
+    auto& preselect = mToStore[source][event];
 
     offset = updateParticles(mcParticlesCursor,
                              mcColId,
