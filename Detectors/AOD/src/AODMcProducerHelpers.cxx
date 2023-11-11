@@ -24,8 +24,13 @@ bool hasKeys(o2::dataformats::MCEventHeader const& header,
              const std::vector<std::string>& keys,
              bool anyNotAll)
 {
-  auto check = [&header](const std::string& key) { return header.hasInfo(key); };
-  return (anyNotAll ? std::any_of(keys.cbegin(), keys.cend(), check) : std::all_of(keys.cbegin(), keys.cend(), check));
+  auto check = [&header](const std::string& key) { // Do not format
+    return header.hasInfo(key);
+  };
+  return (anyNotAll ? // Do not format
+            std::any_of(keys.cbegin(), keys.cend(), check)
+                    : // Do not format
+            std::all_of(keys.cbegin(), keys.cend(), check));
 }
 //====================================================================
 short updateMCCollisions(const CollisionCursor& cursor,
@@ -70,10 +75,15 @@ bool updateHepMCXSection(const XSectionCursor& cursor,
 
   if (when == HepMCUpdate::never or
       (when != HepMCUpdate::always and
-       not hasKeys(header, {Key::acceptedEvents, Key::attemptedEvents, Key::xSection, Key::xSectionError}, when == HepMCUpdate::anyKey))) {
+       not hasKeys(header, {                      // Do not
+                            Key::acceptedEvents,  // mess with
+                            Key::attemptedEvents, // with
+                            Key::xSection,        // my
+                            Key::xSectionError},  // formatting
+                   when == HepMCUpdate::anyKey))) {
     return false;
   }
-  
+
   cursor(0,
          collisionID,
          generatorID,
@@ -96,10 +106,20 @@ bool updateHepMCPdfInfo(const PdfInfoCursor& cursor,
   using Key = o2::dataformats::MCInfoKeys;
 
   if (when == HepMCUpdate::never or
-      (when != HepMCUpdate::always and not hasKeys(header, {Key::pdfParton1Id, Key::pdfParton2Id, Key::pdfCode1, Key::pdfCode2, Key::pdfX1, Key::pdfX2, Key::pdfScale, Key::pdfXF1, Key::pdfXF2}, when == HepMCUpdate::anyKey))) {
+      (when != HepMCUpdate::always and         // Do
+       not hasKeys(header, {Key::pdfParton1Id, // not
+                            Key::pdfParton2Id, // mess
+                            Key::pdfCode1,     // with
+                            Key::pdfCode2,     // my
+                            Key::pdfX1,        // formatting
+                            Key::pdfX2,        // .
+                            Key::pdfScale,     // It
+                            Key::pdfXF1,       // is
+                            Key::pdfXF2},      // better
+                   when == HepMCUpdate::anyKey))) {
     return false;
   }
-  
+
   cursor(0,
          collisionID,
          generatorID,
@@ -125,10 +145,26 @@ bool updateHepMCHeavyIon(const HeavyIonCursor& cursor,
   using Key = dataformats::MCInfoKeys;
 
   if (when == HepMCUpdate::never or
-      (when != HepMCUpdate::always and not hasKeys(header, {Key::nCollHard, Key::nPartProjectile, Key::nPartTarget, Key::nColl, Key::nCollNNWounded, Key::nCollNWoundedN, Key::nCollNWoundedNwounded, Key::nSpecProjectileNeutron, Key::nSpecTargetNeutron, Key::nSpecProjectileProton, Key::nSpecTargetProton, Key::planeAngle, "eccentricity", Key::sigmaInelNN, Key::centrality}, when == HepMCUpdate::anyKey))) {
+      (when != HepMCUpdate::always and                   // clang
+       not hasKeys(header, {Key::nCollHard,              // format
+                            Key::nPartProjectile,        // is
+                            Key::nPartTarget,            // so
+                            Key::nColl,                  // annoying
+                            Key::nCollNNWounded,         // .
+                            Key::nCollNWoundedN,         // It
+                            Key::nCollNWoundedNwounded,  // messes
+                            Key::nSpecProjectileNeutron, // up
+                            Key::nSpecTargetNeutron,     // the
+                            Key::nSpecProjectileProton,  // clarity
+                            Key::nSpecTargetProton,      // of
+                            Key::planeAngle,             // the
+                            "eccentricity",              // code
+                            Key::sigmaInelNN,            // to
+                            Key::centrality},            // noavail
+                   when == HepMCUpdate::anyKey))) {
     return false;
   }
-  
+
   int specNeutrons = (getEventInfo(header, Key::nSpecProjectileNeutron, -1) +
                       getEventInfo(header, Key::nSpecTargetNeutron, -1));
   int specProtons = (getEventInfo(header, Key::nSpecProjectileProton, -1) +
@@ -186,7 +222,7 @@ void updateParticle(const ParticleCursor& cursor,
   if (MCTrackNavigator::isPhysicalPrimary(track, tracks)) {
     flags = PhysicalPrimary;
   }
-  
+
   int daughters[2] = {-1, -1};
   std::vector<int> mothers;
   int id;
@@ -201,8 +237,7 @@ void updateParticle(const ParticleCursor& cursor,
   }
   if ((id = mapping(track.getFirstDaughterTrackId())) >= 0) {
     daughters[1] = id;
-  }
-  else {
+  } else {
     daughters[1] = daughters[0];
   }
   if (daughters[0] < 0 and daughters[1] >= 0) {
@@ -213,7 +248,7 @@ void updateParticle(const ParticleCursor& cursor,
   if (daughters[0] > daughters[1]) {
     std::swap(daughters[0], daughters[1]);
   }
-  
+
   float weight = track.getWeight();
   float pX = float(track.Px());
   float pY = float(track.Py());
@@ -333,7 +368,7 @@ uint32_t updateParticles(const ParticleCursor& cursor,
     if (storeIt < 0) {
       continue;
     }
-    
+
     auto& track = tracks[trackNo];
     auto hepmc = getHepMCStatusCode(track.getStatusCode());
     uint8_t flags = (background ? FromBackgroundEvent : 0);
