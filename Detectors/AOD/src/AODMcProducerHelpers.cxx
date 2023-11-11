@@ -70,9 +70,10 @@ bool updateHepMCXSection(const XSectionCursor& cursor,
 
   if (when == HepMCUpdate::never or
       (when != HepMCUpdate::always and
-       not hasKeys(header, {Key::acceptedEvents, Key::attemptedEvents, Key::xSection, Key::xSectionError}, when == HepMCUpdate::anyKey)))
+       not hasKeys(header, {Key::acceptedEvents, Key::attemptedEvents, Key::xSection, Key::xSectionError}, when == HepMCUpdate::anyKey))) {
     return false;
-
+  }
+  
   cursor(0,
          collisionID,
          generatorID,
@@ -95,9 +96,10 @@ bool updateHepMCPdfInfo(const PdfInfoCursor& cursor,
   using Key = o2::dataformats::MCInfoKeys;
 
   if (when == HepMCUpdate::never or
-      (when != HepMCUpdate::always and not hasKeys(header, {Key::pdfParton1Id, Key::pdfParton2Id, Key::pdfCode1, Key::pdfCode2, Key::pdfX1, Key::pdfX2, Key::pdfScale, Key::pdfXF1, Key::pdfXF2}, when == HepMCUpdate::anyKey)))
+      (when != HepMCUpdate::always and not hasKeys(header, {Key::pdfParton1Id, Key::pdfParton2Id, Key::pdfCode1, Key::pdfCode2, Key::pdfX1, Key::pdfX2, Key::pdfScale, Key::pdfXF1, Key::pdfXF2}, when == HepMCUpdate::anyKey))) {
     return false;
-
+  }
+  
   cursor(0,
          collisionID,
          generatorID,
@@ -123,9 +125,10 @@ bool updateHepMCHeavyIon(const HeavyIonCursor& cursor,
   using Key = dataformats::MCInfoKeys;
 
   if (when == HepMCUpdate::never or
-      (when != HepMCUpdate::always and not hasKeys(header, {Key::nCollHard, Key::nPartProjectile, Key::nPartTarget, Key::nColl, Key::nCollNNWounded, Key::nCollNWoundedN, Key::nCollNWoundedNwounded, Key::nSpecProjectileNeutron, Key::nSpecTargetNeutron, Key::nSpecProjectileProton, Key::nSpecTargetProton, Key::planeAngle, "eccentricity", Key::sigmaInelNN, Key::centrality}, when == HepMCUpdate::anyKey)))
+      (when != HepMCUpdate::always and not hasKeys(header, {Key::nCollHard, Key::nPartProjectile, Key::nPartTarget, Key::nColl, Key::nCollNNWounded, Key::nCollNWoundedN, Key::nCollNWoundedNwounded, Key::nSpecProjectileNeutron, Key::nSpecTargetNeutron, Key::nSpecProjectileProton, Key::nSpecTargetProton, Key::planeAngle, "eccentricity", Key::sigmaInelNN, Key::centrality}, when == HepMCUpdate::anyKey))) {
     return false;
-
+  }
+  
   int specNeutrons = (getEventInfo(header, Key::nSpecProjectileNeutron, -1) +
                       getEventInfo(header, Key::nSpecTargetNeutron, -1));
   int specProtons = (getEventInfo(header, Key::nSpecProjectileProton, -1) +
@@ -168,8 +171,9 @@ void updateParticle(const ParticleCursor& cursor,
 
   auto mapping = [&toStore](int trackNo) {
     auto iter = toStore.find(trackNo);
-    if (iter == toStore.end())
+    if (iter == toStore.end()) {
       return -1;
+    }
     return iter->second;
   };
 
@@ -179,30 +183,37 @@ void updateParticle(const ParticleCursor& cursor,
     flags = ProducedByTransport;
     statusCode = track.getProcess();
   }
-  if (MCTrackNavigator::isPhysicalPrimary(track, tracks))
+  if (MCTrackNavigator::isPhysicalPrimary(track, tracks)) {
     flags = PhysicalPrimary;
-
+  }
+  
   int daughters[2] = {-1, -1};
   std::vector<int> mothers;
   int id;
-  if ((id = mapping(track.getMotherTrackId())) >= 0)
+  if ((id = mapping(track.getMotherTrackId())) >= 0) {
     mothers.push_back(id);
-  if ((id = mapping(track.getSecondMotherTrackId())) >= 0)
+  }
+  if ((id = mapping(track.getSecondMotherTrackId())) >= 0) {
     mothers.push_back(id);
-  if ((id = mapping(track.getFirstDaughterTrackId())) >= 0)
+  }
+  if ((id = mapping(track.getFirstDaughterTrackId())) >= 0) {
     daughters[0] = id;
-  if ((id = mapping(track.getFirstDaughterTrackId())) >= 0)
+  }
+  if ((id = mapping(track.getFirstDaughterTrackId())) >= 0) {
     daughters[1] = id;
-  else
+  }
+  else {
     daughters[1] = daughters[0];
+  }
   if (daughters[0] < 0 and daughters[1] >= 0) {
     LOG(error) << "Problematic daughters: " << daughters[0] << " and "
                << daughters[1];
     daughters[0] = daughters[1];
   }
-  if (daughters[0] > daughters[1])
+  if (daughters[0] > daughters[1]) {
     std::swap(daughters[0], daughters[1]);
-
+  }
+  
   float weight = track.getWeight();
   float pX = float(track.Px());
   float pY = float(track.Py());
@@ -253,8 +264,9 @@ uint32_t updateParticles(const ParticleCursor& cursor,
   // the table exported.
   auto mapping = [&toStore](int trackNo) {
     auto iter = toStore.find(trackNo);
-    if (iter == toStore.end())
+    if (iter == toStore.end()) {
       return -1;
+    }
     return iter->second;
   };
 
@@ -281,14 +293,18 @@ uint32_t updateParticles(const ParticleCursor& cursor,
     // daughters(?) to be stored.
     if (filter) {
       int id;
-      if ((id = track.getMotherTrackId()) >= 0)
+      if ((id = track.getMotherTrackId()) >= 0) {
         toStore[id] = 1;
-      if ((id = track.getSecondMotherTrackId()) >= 0)
+      }
+      if ((id = track.getSecondMotherTrackId()) >= 0) {
         toStore[id] = 1;
-      if ((id = track.getFirstDaughterTrackId()) >= 0)
+      }
+      if ((id = track.getFirstDaughterTrackId()) >= 0) {
         toStore[id] = 1;
-      if ((id = track.getLastDaughterTrackId()) >= 0)
+      }
+      if ((id = track.getLastDaughterTrackId()) >= 0) {
         toStore[id] = 1;
+      }
     }
   }
 
@@ -299,8 +315,9 @@ uint32_t updateParticles(const ParticleCursor& cursor,
   size_t index = 0;
   for (size_t trackNo = 0U; trackNo < tracks.size(); trackNo++) {
     auto storeIt = mapping(trackNo);
-    if (storeIt < 0)
+    if (storeIt < 0) {
       continue;
+    }
 
     toStore[trackNo] = offset + index;
     index++;
@@ -313,9 +330,10 @@ uint32_t updateParticles(const ParticleCursor& cursor,
   // Third loop to actually store the particles in the order given
   for (size_t trackNo = 0U; trackNo < tracks.size(); trackNo++) {
     auto storeIt = mapping(trackNo);
-    if (storeIt < 0)
+    if (storeIt < 0) {
       continue;
-
+    }
+    
     auto& track = tracks[trackNo];
     auto hepmc = getHepMCStatusCode(track.getStatusCode());
     uint8_t flags = (background ? FromBackgroundEvent : 0);
