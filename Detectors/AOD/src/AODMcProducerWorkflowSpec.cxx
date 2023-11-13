@@ -121,12 +121,14 @@ void AODMcProducerWorkflowDPL::run(ProcessingContext& pc)
 
   // --- Create our reader -------------------------------------------
   std::unique_ptr<MCKinematicsReader> reader;
-  if (not mEnableEmbed)
+  if (not mEnableEmbed) {
     reader =
       std::make_unique<MCKinematicsReader>(mSimPrefix,
                                            MCKinematicsReader::Mode::kMCKine);
-  else
+  }
+  else {
     reader = std::make_unique<MCKinematicsReader>("collisioncontext.root");
+  }
 
   // --- Container of event indexes ---------------------------------
   using EventInfo = std::vector<std::tuple<int, int, int>>;
