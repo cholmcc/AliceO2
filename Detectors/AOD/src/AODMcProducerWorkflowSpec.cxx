@@ -125,8 +125,7 @@ void AODMcProducerWorkflowDPL::run(ProcessingContext& pc)
     reader =
       std::make_unique<MCKinematicsReader>(mSimPrefix,
                                            MCKinematicsReader::Mode::kMCKine);
-  }
-  else {
+  } else {
     reader = std::make_unique<MCKinematicsReader>("collisioncontext.root");
   }
 
