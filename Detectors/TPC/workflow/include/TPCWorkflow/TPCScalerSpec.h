@@ -9,24 +9,19 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
-#ifndef O2_SECONDARY_VERTEXER_SPEC_H
-#define O2_SECONDARY_VERTEXER_SPEC_H
+#ifndef O2_TPC_TPCSCALER_SPEC
+#define O2_TPC_TPCSCALER_SPEC
 
-/// @file SecondaryVertexingSpec.h
-
-#include "ReconstructionDataFormats/GlobalTrackID.h"
 #include "Framework/DataProcessorSpec.h"
-#include "Framework/Task.h"
 
 namespace o2
 {
-namespace vertexing
+namespace tpc
 {
 
-/// create a processor spec
-o2::framework::DataProcessorSpec getSecondaryVertexingSpec(o2::dataformats::GlobalTrackID::mask_t src, bool enableCasc, bool enable3body, bool enableStrangenesTracking, bool useMC, int lumiType);
+o2::framework::DataProcessorSpec getTPCScalerSpec();
 
-} // namespace vertexing
-} // namespace o2
+} // end namespace tpc
+} // end namespace o2
 
 #endif
