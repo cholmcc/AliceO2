@@ -161,8 +161,8 @@ void GeneratorHepMC::pruneEvent(Select select)
                    << " "
                    << std::setw(3) << inbound.size() << " in ";
 
-	// Other out-bound particles of the end vertex are attached as
-	// out-going to the production vertex of this particle.
+        // Other out-bound particles of the end vertex are attached as
+        // out-going to the production vertex of this particle.
         for (auto outgoing : outbound) {
           // This should also detach the particle from its old
           // end-vertex.
@@ -175,9 +175,9 @@ void GeneratorHepMC::pruneEvent(Select select)
           }
         }
 
-	// Other incoming particles to the end vertex of this
-	// particles are attached incoming particles to the production
-	// vertex of this particle.
+        // Other incoming particles to the end vertex of this
+        // particles are attached incoming particles to the production
+        // vertex of this particle.
         for (auto incoming : inbound) {
           if (incoming) {
             auto pp = incoming->production_vertex();
@@ -275,7 +275,7 @@ Bool_t GeneratorHepMC::importParticles()
                                    vertex.t()));               // Production time
     o2::mcutils::MCGenHelper::encodeParticleStatusAndTracking( //
       mParticles.back(),                                       // Add to back
-      particle->status() == 1);                                                // only final state are to be propagated
+      particle->status() == 1);                                // only final state are to be propagated
 
   } /** end of loop over particles **/
 
