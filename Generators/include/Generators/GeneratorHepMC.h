@@ -108,7 +108,7 @@ class GeneratorHepMC : public Generator, public GeneratorFileOrCmd
   /** Prune event of particles that are not selected by passed
    * function.  The event structure is preserved. */
   void pruneEvent(Select select);
-  
+
   /** HepMC interface **/
   uint64_t mEventsToSkip = 0;
   /** HepMC event record version to expected.  Deprecated. */
@@ -117,7 +117,7 @@ class GeneratorHepMC : public Generator, public GeneratorFileOrCmd
   /** Event structure */
   HepMC3::GenEvent* mEvent = nullptr;
   /** Option whether to prune event */
-  bool mPrune; //! 
+  bool mPrune; //!
 
   ClassDefOverride(GeneratorHepMC, 1);
 
