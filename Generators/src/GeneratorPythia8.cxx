@@ -331,15 +331,15 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
   //     auto  newIdx   = findNew(i);
   //     auto& particle = event[i];
   //     std::cerr << std::setw(3) << i << " -> "
-  // 		<< std::setw(3) << newIdx << " "
-  // 		<< std::setw(3) << particle.statusHepMC() << "/"
-  // 		<< std::setw(5) << particle.status() << " "
-  // 		<< std::setw(6) << particle.id() << " "
-  // 		<< std::setw(3) << particle.mother1() << ","
-  // 		<< std::setw(3) << particle.mother2() << "] ["
-  // 		<< std::setw(3) << particle.daughter1() << ","
-  // 		<< std::setw(3) << particle.daughter2() << "] "
-  // 		<< std::endl;
+  //            << std::setw(3) << newIdx << " "
+  //            << std::setw(3) << particle.statusHepMC() << "/"
+  //            << std::setw(5) << particle.status() << " "
+  //            << std::setw(6) << particle.id() << " "
+  //            << std::setw(3) << particle.mother1() << ","
+  //            << std::setw(3) << particle.mother2() << "] ["
+  //            << std::setw(3) << particle.daughter1() << ","
+  //            << std::setw(3) << particle.daughter2() << "] "
+  //            << std::endl;
   //   }
   // }
 
@@ -370,15 +370,15 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
       int d1 = particle.daughter1();
       int d2 = particle.daughter2();
       if (d1 == 0 and d2 == 0) {
-	return std::vector<int>();
+        return std::vector<int>();
       }
       if (d2 == 0) {
-	return std::vector<int>{d1};
+        return std::vector<int>{d1};
       }
       if (d2 > d1) {
-	std::vector<int> ret(d2-d1+1);
-	std::iota(ret.begin(), ret.end(), d1);
-	return ret;
+        std::vector<int> ret(d2-d1+1);
+        std::iota(ret.begin(), ret.end(), d1);
+        return ret;
       }
       return std::vector<int>{d2,d1};
     }
@@ -487,19 +487,19 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
   //   for (size_t i = 1; i < event.size(); i++) {
   //     int newIdx = findNew(i);
   //     if (newIdx < 0) {
-  // 	continue;
+  //    continue;
   //     }
   //     auto& newParticle = pruned[newIdx];
   //     std::cerr << std::setw(3) << i << " -> "
-  // 		<< std::setw(3) << newIdx << " "
-  // 		<< std::setw(3) << newParticle.statusHepMC() << "/"
-  // 		<< std::setw(5) << newParticle.status() << " "
-  // 		<< std::setw(6) << newParticle.id() << " "
-  // 		<< std::setw(3) << newParticle.mother1() << ","
-  // 		<< std::setw(3) << newParticle.mother2() << "] ["
-  // 		<< std::setw(3) << newParticle.daughter1() << ","
-  // 		<< std::setw(3) << newParticle.daughter2() << "] "
-  // 		<< std::endl;
+  //            << std::setw(3) << newIdx << " "
+  //            << std::setw(3) << newParticle.statusHepMC() << "/"
+  //            << std::setw(5) << newParticle.status() << " "
+  //            << std::setw(6) << newParticle.id() << " "
+  //            << std::setw(3) << newParticle.mother1() << ","
+  //            << std::setw(3) << newParticle.mother2() << "] ["
+  //            << std::setw(3) << newParticle.daughter1() << ","
+  //            << std::setw(3) << newParticle.daughter2() << "] "
+  //            << std::endl;
   //   }
   // }
 
