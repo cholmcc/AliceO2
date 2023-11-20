@@ -386,7 +386,7 @@ int main(int argc, char* argv[])
   //
   // Note that rapidjson::Writer::Flush simply calls
   // rapidjson::OStreamWrapper::Flush.
-  // 
+  //
   // writer.Flush();
   stream.Flush();
   of.close();
