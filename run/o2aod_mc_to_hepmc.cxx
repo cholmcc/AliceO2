@@ -231,7 +231,7 @@ WorkflowSpec defineDataProcessing(ConfigContext const& cfg)
   // Task1: One entry: header, tracks, auxiliary
   // Task2: Two entry: header, tracks, and auxiliary
   return WorkflowSpec{
-    adaptAnalysisTask<Task2>(cfg, TaskName{"o2-aod-mc-to-hepmc"})};
+    adaptAnalysisTask<Task1>(cfg, TaskName{"o2-aod-mc-to-hepmc"})};
 }
 //
 // EOF

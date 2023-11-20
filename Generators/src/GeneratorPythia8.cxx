@@ -405,8 +405,9 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
 
   for (size_t i = 1; i < event.size(); i++) {
     int newIdx = findNew(i);
-    if (newIdx < 0)
+    if (newIdx < 0) {
       continue;
+    }
 
     auto particle = event[i];
     int realIdx = pruned.append(particle);
@@ -475,8 +476,9 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
                                          allMothers.end());
     size_t maxMother = *std::max_element(allMothers.begin(),
                                          allMothers.end());
-    for (auto daughterIdx : allDaughters)
+    for (auto daughterIdx : allDaughters) {
       pruned[daughterIdx].mothers(minMother, maxMother);
+    }
   }
 
   // if (verb) {

@@ -378,7 +378,17 @@ int main(int argc, char* argv[])
     LOG(info) << "######################################################";
   });
   writer.EndObject();
-  writer.Flush();
+  // rapidjson::Writer::Flush was introduced 15th of March, 2017,
+  // _without_ updating the version number (last version update is
+  // from 25th of August, 2016 from 1.0.2 to 1.1.0).  The authors
+  // should really get their act together and bump the version when
+  // they change the API.
+  //
+  // Note that rapidjson::Writer::Flush simply calls
+  // rapidjson::OStreamWrapper::Flush.
+  // 
+  // writer.Flush();
+  stream.Flush();
   of.close();
 
   // writerFrequencies.EndObject();
