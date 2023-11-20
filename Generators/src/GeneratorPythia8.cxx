@@ -309,7 +309,6 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
 
   // Particle 0 is a system particle, and we will skip that in the
   // following.
-  // filtered.push_back(event[0]);
   size_t newId = 0;
 
   // Loop over particles and store those we need
@@ -325,23 +324,6 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
     auto iter = old2new.find(old);
     return iter == old2new.end() ? -1 : iter->second;
   };
-
-  // if (verb) {
-  //   for (size_t i = 1; i < event.size(); i++) {
-  //     auto  newIdx   = findNew(i);
-  //     auto& particle = event[i];
-  //     std::cerr << std::setw(3) << i << " -> "
-  //            << std::setw(3) << newIdx << " "
-  //            << std::setw(3) << particle.statusHepMC() << "/"
-  //            << std::setw(5) << particle.status() << " "
-  //            << std::setw(6) << particle.id() << " "
-  //            << std::setw(3) << particle.mother1() << ","
-  //            << std::setw(3) << particle.mother2() << "] ["
-  //            << std::setw(3) << particle.daughter1() << ","
-  //            << std::setw(3) << particle.daughter2() << "] "
-  //            << std::endl;
-  //   }
-  // }
 
   // First loop, investigate mothers - from the bottom
   auto getMothers = [](const Pythia8::Particle& particle) { return particle.motherList(); };
@@ -481,30 +463,8 @@ void GeneratorPythia8::pruneEvent(Pythia8::Event& event, Select select)
     }
   }
 
-  // if (verb) {
-  //   // Cannot do this printing until after _all_ particles have been
-  //   // added to the pruned event.  Some of the member functions
-  //   // actually reference back to the event and looks up particles
-  //   // from that, which means all particles must be in.
-  //   for (size_t i = 1; i < event.size(); i++) {
-  //     int newIdx = findNew(i);
-  //     if (newIdx < 0) {
-  //    continue;
-  //     }
-  //     auto& newParticle = pruned[newIdx];
-  //     std::cerr << std::setw(3) << i << " -> "
-  //            << std::setw(3) << newIdx << " "
-  //            << std::setw(3) << newParticle.statusHepMC() << "/"
-  //            << std::setw(5) << newParticle.status() << " "
-  //            << std::setw(6) << newParticle.id() << " "
-  //            << std::setw(3) << newParticle.mother1() << ","
-  //            << std::setw(3) << newParticle.mother2() << "] ["
-  //            << std::setw(3) << newParticle.daughter1() << ","
-  //            << std::setw(3) << newParticle.daughter2() << "] "
-  //            << std::endl;
-  //   }
-  // }
-
+  LOG(info) << "Pythia event was pruned from " << event.size()
+	    << " to " << pruned.size() << " particles";
   // Assign our pruned event to the event passed in
   event = pruned;
 }
