@@ -118,7 +118,6 @@ struct Task {
 
       LOG(info) << "Increment BC counter";
       bcCounter++;
-
     }
     using o2::framework::Lifetime;
     using o2::framework::Output;
