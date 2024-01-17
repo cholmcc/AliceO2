@@ -246,8 +246,6 @@ GPUd() bool TrackParametrizationWithError<value_T>::propagateToDCA(const o2::dat
   if (!tmpT.rotate(alp) || !tmpT.propagateTo(xv, b)) {
 #if !defined(GPUCA_ALIGPUCODE)
     LOG(debug) << "failed to propagate to alpha=" << alp << " X=" << xv << vtx << " | Track is: " << tmpT.asString();
-#elif !defined(GPUCA_NO_FMT)
-    LOG(debug) << "failed to propagate to alpha=" << alp << " X=" << xv << vtx;
 #endif
     return false;
   }
@@ -555,8 +553,8 @@ GPUd() bool TrackParametrizationWithError<value_T>::propagateTo(value_t xk, cons
                                       vecLab[6]};
 
   // Do the helix step
-  value_t sgn = this->getSign();
-  g3helx3(sgn * bb, step, vect);
+  value_t q = this->getCharge();
+  g3helx3(q * bb, step, vect);
 
   // Rotate back to the Global System
   vecLab[0] = cosphi * costet * vect[0] - sinphi * vect[1] + cosphi * sintet * vect[2];
@@ -595,7 +593,7 @@ GPUd() bool TrackParametrizationWithError<value_T>::propagateTo(value_t xk, cons
   this->setZ(z);
   this->setSnp(vecLab[4] * t);
   this->setTgl(vecLab[5] * t);
-  this->setQ2Pt(sgn * t / vecLab[6]);
+  this->setQ2Pt(q * t / vecLab[6]);
 
   return true;
 }
@@ -728,8 +726,8 @@ GPUd() auto TrackParametrizationWithError<value_T>::getPredictedChi2(const value
   value_t z = this->getZ() - p[1];
   auto chi2 = (d * (szz * d - sdz * z) + z * (sdd * z - d * sdz)) / det;
   if (chi2 < 0.) {
-    LOGP(warning, "Negative chi2={}, Cluster: {} {} {} Dy:{} Dz:{} | sdd:{} sdz:{} szz:{} det:{}", chi2, cov[0], cov[1], cov[2], d, z, sdd, sdz, szz, det);
 #ifndef GPUCA_ALIGPUCODE
+    LOGP(warning, "Negative chi2={}, Cluster: {} {} {} Dy:{} Dz:{} | sdd:{} sdz:{} szz:{} det:{}", chi2, cov[0], cov[1], cov[2], d, z, sdd, sdz, szz, det);
     LOGP(warning, "Track: {}", asString());
 #endif
   }

@@ -530,7 +530,7 @@ bool TRDGlobalTracking::refitITSTPCTRDTrack(TrackTRD& trk, float timeTRD, o2::gl
   if (detRefs[GTrackID::ITS].isIndexSet()) { // this is ITS track
     const auto& trkITS = mITSTracksArray[detRefs[GTrackID::ITS]];
     outerParam = trkITS.getParamOut();
-    outerParam.setPID(recoCont->getTPCITSTrack(trk.getRefGlobalTrackId()).getPID());
+    outerParam.setPID(recoCont->getTPCITSTrack(trk.getRefGlobalTrackId()).getPID(), true);
     nCl = trkITS.getNumberOfClusters();
     clEntry = trkITS.getFirstClusterEntry();
     chi2Out = trkITS.getChi2();
@@ -875,7 +875,7 @@ DataProcessorSpec getTRDGlobalTrackingSpec(bool useMC, GTrackID::mask_t src, boo
     processorName,
     inputs,
     outputs,
-    AlgorithmSpec{adaptFromTask<TRDGlobalTracking>(useMC, withPID, policy, dataRequest, ggRequest, src, trigRecFilterActive, strict)},
+    AlgorithmSpec{adaptFromTask<TRDGlobalTracking>(useMC, withPID, policy, dataRequest, ggRequest, sclOpts, src, trigRecFilterActive, strict)},
     opts};
 }
 

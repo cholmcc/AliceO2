@@ -33,6 +33,7 @@ struct errorCounters {
   void printStream(std::ostream& stream) const;
   uint32_t lmB = 0, l0B = 0, l1B = 0, lmA = 0, l0A = 0, l1A = 0;       // decreasing counters
   uint32_t lmBlmA = 0, lmAl0B = 0, l0Bl0A = 0, l0Al1B = 0, l1Bl1A = 0; // between levels countres
+  uint32_t lmBlmAd1 = 0, lmAl0Bd1 = 0, l0Bl0Ad1 = 0, l0Al1Bd1 = 0, l1Bl1Ad1 = 0; // between levels countres - diff =1 - just warning
   uint32_t MAXPRINT = 3;
 };
 struct CTPScalerRaw {
@@ -115,7 +116,8 @@ class CTPRunScalers
   // v1
   // static constexpr uint32_t NCOUNTERS = 1070;
   // v2 - orbitid added at the end
-  static constexpr uint32_t NCOUNTERS = 1071;
+  static constexpr uint32_t NCOUNTERSv2 = 1071;
+  static constexpr uint32_t NCOUNTERS = 1085;
   static std::vector<std::string> scalerNames;
 
   void printLMBRateVsT() const; // prints LMB interaction rate vs time for debugging

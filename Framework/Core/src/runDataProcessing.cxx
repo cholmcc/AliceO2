@@ -646,6 +646,12 @@ void spawnDevice(uv_loop_t* loop,
   if (id == 0) {
     // We allow being debugged and do not terminate on SIGTRAP
     signal(SIGTRAP, SIG_IGN);
+    // We immediately ignore SIGUSR1 and SIGUSR2 so that we do not
+    // get killed by the parent trying to force stepping children.
+    // We will re-enable them later on, when it is actually safe to
+    // do so.
+    signal(SIGUSR1, SIG_IGN);
+    signal(SIGUSR2, SIG_IGN);
 
     // This is the child.
     // For stdout / stderr, we close the read part of the pipe, the
@@ -794,7 +800,7 @@ void processChildrenOutput(DriverInfo& driverInfo,
     }
 
     O2_SIGNPOST_ID_FROM_POINTER(sid, driver, &info);
-    O2_SIGNPOST_START(driver, sid, "bytes_processed", "bytes processed by " O2_ENG_TYPE(pid, "d"), info.pid);
+    O2_SIGNPOST_START(driver, sid, "bytes_processed", "bytes processed by %{xcode:pid}d", info.pid);
 
     std::string_view s = info.unprinted;
     size_t pos = 0;
@@ -842,7 +848,7 @@ void processChildrenOutput(DriverInfo& driverInfo,
     size_t oldSize = info.unprinted.size();
     info.unprinted = std::string(s);
     int64_t bytesProcessed = oldSize - info.unprinted.size();
-    O2_SIGNPOST_END(driver, sid, "bytes_processed", "bytes processed by " O2_ENG_TYPE(network - size - in - bytes, PRIi64), bytesProcessed);
+    O2_SIGNPOST_END(driver, sid, "bytes_processed", "bytes processed by %{xcode:network-size-in-bytes}" PRIi64, bytesProcessed);
   }
 }
 
